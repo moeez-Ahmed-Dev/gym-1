@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>TMPL — A Sanctuary for the Modern Ritual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Added GSAP Libraries for Pro Animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{
+    /* High-Energy Gym Palette */
+    --ink: #070709;         /* Deep space black */
+    --ink-2: #111114;       /* Slightly lighter charcoal */
+    --ink-3: #1a1a1f;       /* Elevated dark gray */
+    --bone: #ffffff;        /* Crisp, bright white */
+    --bone-dim: #a1a1aa;    /* Cool muted gray for readability */
+    --brass: #ccff00;       /* Electric Volt Green */
+    --brass-bright: #e6ff66;/* Lighter Neon Green for highlights */
+    --line: rgba(255, 255, 255, 0.12); /* Crisp, subtle white lines */
+    
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1280px; margin:0 auto; padding:0 40px;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--brass-bright);
+    display: inline-block;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:26px 0;
+    transition:background .4s ease, padding .4s ease, border-color .4s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.solid{
+    background:rgba(7, 7, 9, 0.95);
+    backdrop-filter:blur(10px);
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  header .wrap{display:flex; align-items:center; justify-content:space-between;}
+  
+  /* --- Giggling Logo Animation --- */
+  .logotype{
+    font-family:var(--serif);
+    font-size:22px;
+    letter-spacing:.14em;
+    font-weight:500;
+    display:inline-block;
+    transform-origin: center;
+    /* Subtle periodic giggle */
+    animation: giggle-idle 4s ease-in-out infinite; 
+    transition: color 0.3s ease;
+  }
+  
+  .logotype:hover{
+    /* Fast, energetic giggle on hover */
+    animation: giggle-hover 0.4s ease-in-out infinite;
+    color: var(--brass);
+    cursor: pointer;
+  }
+
+  @keyframes giggle-idle {
+    0%, 85% { transform: rotate(0deg) scale(1); }
+    88% { transform: rotate(-4deg) scale(1.05); }
+    91% { transform: rotate(4deg) scale(1.05); }
+    94% { transform: rotate(-4deg) scale(1.05); }
+    97% { transform: rotate(4deg) scale(1.05); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+
+  @keyframes giggle-hover {
+    0%, 100% { transform: rotate(0deg) scale(1.1); }
+    25% { transform: rotate(-6deg) scale(1.1) translateY(-1px); }
+    50% { transform: rotate(6deg) scale(1.1) translateY(1px); }
+    75% { transform: rotate(-6deg) scale(1.1) translateY(-1px); }
+  }
+  /* ------------------------------- */
+
+  nav.links{display:flex; gap:44px; font-size:13px; letter-spacing:.04em; font-weight:500;}
+  nav.links a{position:relative; padding-bottom:4px;}
+  nav.links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:2px;
+    background:var(--brass-bright); transition:width .4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  nav.links a:hover::after{width:100%;}
+  .nav-right{display:flex; align-items:center; gap:32px;}
+  .btn{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.12em;
+    font-weight: 500;
+    text-transform:uppercase;
+    padding:13px 26px;
+    border:1px solid var(--brass);
+    color:var(--ink);
+    background: var(--brass);
+    display:inline-block;
+    transition:all .4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    white-space:nowrap;
+    transform-style:preserve-3d;
+  }
+  .btn:hover{
+    background:var(--brass-bright); border-color:var(--brass-bright);
+    transform:translateY(-4px);
+    box-shadow:0 20px 30px -10px rgba(204, 255, 0, 0.4);
+  }
+  .btn.ghost{
+    border-color:var(--line); 
+    background: transparent;
+    color: var(--bone);
+  }
+  .btn.ghost:hover{
+    background:var(--bone); color:var(--ink); border-color:var(--bone); 
+    box-shadow:0 20px 30px -10px rgba(255,255,255,.2);
+  }
+  .menu-btn{display:none; background:none; border:0; color:var(--bone); font-size:22px; cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    overflow:hidden;
+    perspective:1400px;
+  }
+  .hero-bg{
+    position:absolute; inset:-6%;
+    background:
+      linear-gradient(180deg, rgba(7,7,9,.6) 0%, rgba(7,7,9,.4) 30%, rgba(7,7,9,.98) 94%),
+      url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2560&auto=format&fit=crop') center/cover no-repeat;
+    will-change:transform;
+    transform-style:preserve-3d;
+  }
+  .pillars{
+    position:absolute; inset:0; display:flex; justify-content:space-evenly;
+    pointer-events:none; opacity:.4; perspective:800px;
+  }
+  .pillars span{
+    width:1px; height:100%;
+    background:linear-gradient(180deg, transparent 0%, var(--brass) 35%, var(--brass) 65%, transparent 100%);
+    opacity:.3;
+    transform-style:preserve-3d;
+    animation:sway 9s ease-in-out infinite;
+  }
+  .pillars span:nth-child(2n){animation-duration:11s; animation-delay:-2s;}
+  .pillars span:nth-child(3n){animation-duration:7s; animation-delay:-4s;}
+  @keyframes sway{
+    0%,100%{transform:rotateY(0deg) translateZ(0);}
+    50%{transform:rotateY(6deg) translateZ(30px);}
+  }
+  .hero-inner{position:relative; padding-bottom:100px; padding-top:180px; width:100%; will-change:transform;}
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(44px, 7vw, 96px);
+    line-height:1.02;
+    letter-spacing:-.01em;
+    max-width:920px;
+    margin:22px 0 26px;
+    text-shadow:0 30px 60px rgba(0,0,0,.8);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  .hero h1 em{font-style:italic; color:var(--brass); font-weight:400;}
+  .hero p{
+    max-width:480px;
+    color:var(--bone-dim);
+    font-size:16px;
+    margin-bottom:40px;
+  }
+  .hero-ctas{display:flex; gap:18px; flex-wrap:wrap;}
+  .scroll-cue{
+    position:absolute; right:40px; bottom:40px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+    color:var(--bone-dim); writing-mode:vertical-rl; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue::after{content:''; width:2px; height:50px; background:var(--brass); display:block;}
+
+  /* ---------- MANIFESTO ---------- */
+  .manifesto{
+    background:var(--ink-2);
+    padding:150px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    position:relative;
+    perspective:1200px;
+    overflow:hidden;
+  }
+  .manifesto-orb{
+    position:absolute; width:520px; height:520px; border-radius:50%;
+    top:50%; right:-180px; transform:translateY(-50%);
+    background:radial-gradient(circle at 35% 35%, rgba(204, 255, 0, 0.12), transparent 70%);
+    filter:blur(15px);
+    animation:orbit 16s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes orbit{
+    0%,100%{transform:translateY(-50%) translateX(0) rotate(0deg);}
+    50%{transform:translateY(-56%) translateX(-40px) rotate(8deg);}
+  }
+  .manifesto .grid{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:80px;
+    position:relative; z-index:1;
+  }
+  .manifesto .pull{
+    font-family:var(--serif);
+    font-size:clamp(28px,3.4vw,44px);
+    font-weight:400;
+    line-height:1.25;
+    color:var(--bone);
+  }
+  .manifesto .pull span{color:var(--brass-bright); font-style:italic;}
+  .manifesto .body p{color:var(--bone-dim); margin-bottom:22px; font-size:15px; font-weight: 400;}
+  .manifesto .body p:last-child{margin-bottom:0;}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{
+    border-bottom:1px solid var(--line);
+    padding:40px 0;
+    overflow:hidden;
+    white-space:nowrap;
+    background:var(--ink);
+    perspective:600px;
+  }
+  .marquee-track{
+    display:inline-flex; animation:scroll 32s linear infinite;
+    transform:rotateX(10deg);
+    transform-style:preserve-3d;
+  }
+  .marquee-track span{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:22px;
+    color:var(--bone-dim);
+    padding:0 34px;
+    display:inline-flex;
+    align-items:center;
+    gap:34px;
+    transition:color .4s ease, transform .4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .marquee-track span:hover{color:var(--brass-bright); transform:translateZ(30px) scale(1.1);}
+  .marquee-track span::after{content:'—'; color:var(--brass); font-style:normal;}
+  @keyframes scroll{from{transform:rotateX(10deg) translateX(0);} to{transform:rotateX(10deg) translateX(-50%);}}
+  
+  /* ---------- LOCATIONS ---------- */
+  .locations{padding:150px 0 120px;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:70px; flex-wrap:wrap; gap:20px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:36px;
+  }
+  .section-head h2{
+    font-family:var(--serif); font-weight:400;
+    font-size:clamp(32px,4vw,52px);
+    margin-top:14px;
+  }
+  .section-head p{color:var(--bone-dim); max-width:340px; font-size:14px;}
+
+  .loc-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  .loc-tilt{
+    perspective:1000px;
+    opacity: 0; 
+  }
+  .loc-card{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+    transform-style:preserve-3d;
+    transition:transform .2s ease-out, box-shadow .4s ease, border-color .4s ease;
+    will-change:transform;
+  }
+  .loc-card:hover{
+    box-shadow:0 40px 70px -20px rgba(0,0,0,.9);
+    border-color: var(--brass);
+  }
+  .loc-photo{
+    position:relative;
+    height:230px;
+    overflow:hidden;
+    transform:translateZ(20px);
+    transform-style:preserve-3d;
+  }
+  .loc-photo img{
+    width:100%; height:100%; object-fit:cover;
+    filter:grayscale(80%) contrast(1.2);
+    transition:filter .6s cubic-bezier(0.2, 0.8, 0.2, 1), transform .8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .loc-card:hover .loc-photo img{filter:grayscale(0%) contrast(1.1); transform:scale(1.08);}
+  .loc-code{
+    position:absolute; top:16px; left:16px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em; font-weight: 500;
+    background:rgba(7,7,9,.85); color:var(--brass-bright);
+    padding:6px 10px; border:1px solid var(--line);
+    transform:translateZ(45px);
+  }
+  .loc-body{padding:28px 26px 34px; transform:translateZ(30px);}
+  .loc-body h3{
+    font-family:var(--serif); font-size:22px; font-weight:500; margin-bottom:6px;
+    transition: color 0.3s ease;
+  }
+  .loc-card:hover .loc-body h3 { color: var(--brass-bright); }
+  .loc-addr{color:var(--bone-dim); font-size:13px; margin-bottom:2px;}
+  .loc-phone{
+    font-family:var(--mono); font-size:12px; color:var(--brass-bright);
+    display:inline-block; margin:14px 0 18px;
+  }
+  .loc-tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .loc-tags span{
+    font-family:var(--mono); font-size:10px; letter-spacing:.05em; font-weight: 500;
+    text-transform:uppercase; color:var(--bone);
+    border:1px solid var(--line); padding:5px 9px;
+    background: var(--ink-3);
+  }
+  .loc-link{
+    font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight: 500;
+    color:var(--bone); border-bottom:2px solid var(--brass);
+    padding-bottom:2px; transition: padding 0.3s ease, color 0.3s ease;
+  }
+  .loc-card:hover .loc-link { padding-left: 10px; color: var(--brass); }
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{
+    background:linear-gradient(120deg, var(--ink-3), var(--ink-2));
+    border-top:1px solid var(--line);
+    padding:150px 0;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    perspective:1000px;
+  }
+  .cta-ring{
+    position:absolute; left:50%; top:50%; width:420px; height:420px;
+    margin:-210px 0 0 -210px;
+    border-radius:50%;
+    border:1px solid rgba(204, 255, 0, 0.3);
+    transform-style:preserve-3d;
+    animation:spin3d 22s linear infinite;
+    pointer-events:none;
+  }
+  .cta-ring::before, .cta-ring::after{
+    content:''; position:absolute; inset:40px; border-radius:50%;
+    border:1px solid rgba(204, 255, 0, 0.15);
+  }
+  .cta-ring::after{inset:90px; border-color:rgba(204, 255, 0, 0.08);}
+  @keyframes spin3d{
+    0%{transform:rotateX(65deg) rotateZ(0deg);}
+    100%{transform:rotateX(65deg) rotateZ(360deg);}
+  }
+  .cta-band .wrap{position:relative; z-index:1;}
+  .cta-band .eyebrow{display:block; margin-bottom:20px;}
+  .cta-band h2{
+    font-family:var(--serif); font-weight:400;
+    font-size:clamp(36px,5.5vw,68px);
+    max-width:800px; margin:0 auto 40px;
+    line-height:1.1;
+  }
+  .cta-band h2 em{color:var(--brass-bright); font-style:italic;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:80px 0 40px; border-top:1px solid var(--line); background: var(--ink);}
+  .foot-grid{
+    display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px;
+    padding-bottom:60px;
+  }
+  .foot-brand .logotype{margin-bottom:16px; display:inline-block;}
+  .foot-brand p{color:var(--bone-dim); font-size:14px; max-width:280px;}
+  .foot-col h4{
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--brass-bright); margin-bottom:18px;
+  }
+  .foot-col a{
+    display:block; color:var(--bone-dim); font-size:14px; margin-bottom:12px;
+    transition:color .3s ease, transform .3s ease;
+  }
+  .foot-col a:hover{color:var(--bone); transform:translateX(6px);}
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:30px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--bone-dim); flex-wrap:wrap; gap:14px;
+  }
+  .foot-social{display:flex; gap:20px;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1024px){
+    .wrap{padding:0 32px;}
+    .manifesto{padding:110px 0;}
+    .locations{padding:110px 0 90px;}
+    .cta-band{padding:120px 0;}
+  }
+  @media (max-width:900px){
+    .manifesto .grid{grid-template-columns:1fr; gap:40px;}
+    .manifesto-orb{width:360px; height:360px; right:-140px;}
+    .loc-grid{grid-template-columns:repeat(2,1fr);}
+    .foot-grid{grid-template-columns:1fr 1fr; row-gap:36px;}
+    .foot-brand{grid-column:1 / -1;}
+    .foot-brand p{max-width:420px;}
+    .cta-ring{width:340px; height:340px; margin:-170px 0 0 -170px;}
+  }
+  @media (max-width:680px){
+    .wrap{padding:0 22px;}
+    nav.links{
+      position:fixed; inset:0; top:0;
+      background:var(--ink); flex-direction:column;
+      justify-content:center; align-items:center; gap:34px;
+      font-size:22px; font-family:var(--serif);
+      display:none;
+    }
+    nav.links.open{display:flex;}
+    .nav-right .btn.ghost{display:none;}
+    .menu-btn{display:block; z-index:200;}
+    header{padding:20px 0;}
+    header.solid{padding:14px 0;}
+    .hero-inner{padding-top:120px; padding-bottom:70px;}
+    .hero p{font-size:15px;}
+    .hero-ctas .btn{flex:1 1 auto; text-align:center;}
+    .scroll-cue{display:none;}
+    .manifesto{padding:80px 0;}
+    .manifesto-orb{width:260px; height:260px; right:-120px; opacity:.6;}
+    .marquee{padding:26px 0;}
+    .marquee-track span{font-size:17px; padding:0 22px; gap:22px;}
+    .locations{padding:80px 0 60px;}
+    .section-head{flex-direction:column; align-items:flex-start; margin-bottom:44px;}
+    .loc-grid{grid-template-columns:1fr; gap:18px;}
+    .loc-photo{height:200px;}
+    .cta-band{padding:90px 0;}
+    .cta-ring{width:260px; height:260px; margin:-130px 0 0 -130px;}
+    .cta-ring::before{inset:26px;}
+    .cta-ring::after{inset:56px;}
+    .foot-grid{grid-template-columns:1fr; gap:30px;}
+    .foot-brand{grid-column:auto;}
+    .foot-bottom{flex-direction:column; align-items:flex-start; gap:12px;}
+  }
+  @media (max-width:380px){
+    .hero h1{font-size:38px;}
+    .cta-band h2{font-size:32px;}
+    .loc-tags span{font-size:9px; padding:4px 7px;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <div class="logotype">TMPL</div>
+    <nav class="links" id="navLinks">
+      <a href="#locations">Locations</a>
+      <a href="#classes">Classes</a>
+      <a href="#training">Training</a>
+      <a href="#manifesto">Philosophy</a>
+    </nav>
+    <div class="nav-right">
+      <a href="#" class="btn ghost">Contact</a>
+      <a href="#" class="btn">Reserve a Visit</a>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="heroSection">
+  <div class="hero-bg" id="heroBg">
+    <div class="pillars">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="wrap hero-inner" id="heroInner">
+    <span class="eyebrow gs-hero-elem">Six Clubs — New York City</span>
+    <h1 class="gs-hero-elem">Fitness was never<br>meant to be <em>ordinary.</em></h1>
+    <p class="gs-hero-elem">TMPL is a boutique fitness sanctuary built for people who treat their wellbeing like a discipline — where world-class training meets art, architecture, and ritual.</p>
+    <div class="hero-ctas gs-hero-elem">
+      <a href="#" class="btn">Reserve a Visit</a>
+      <a href="#locations" class="btn ghost">View Locations</a>
+    </div>
+  </div>
+  <div class="scroll-cue gs-hero-elem">Scroll</div>
+</section>
+
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-orb"></div>
+  <div class="wrap grid">
+    <div class="pull">
+      Copy-and-paste isn't in our vocabulary. <span>Every TMPL is built to belong to its own neighborhood</span> — never a franchise, always a fixture.
+    </div>
+    <div class="body">
+      <p class="gs-fade">We believe true wellness comes from the pairing of science and spirit. Each club is led by fitness, wellness, and hospitality professionals who understand that a gym isn't just where you train — it's where you leave the noise of the outside world at the door.</p>
+      <p class="gs-fade">Come back stronger, steadier, and more yourself than when you walked in. That's the ritual we've built six locations around.</p>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Salt Water Pool</span><span>Infrared Sauna</span><span>Boxing Studio</span><span>Reformer Pilates</span><span>Cycle Studio</span><span>Functional Training</span><span>Hydro-Massage</span><span>Hot Yoga</span>
+    <span>Salt Water Pool</span><span>Infrared Sauna</span><span>Boxing Studio</span><span>Reformer Pilates</span><span>Cycle Studio</span><span>Functional Training</span><span>Hydro-Massage</span><span>Hot Yoga</span>
+  </div>
+</div>
+
+<section class="locations" id="locations">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow gs-head-elem">The Directory</span>
+        <h2 class="gs-head-elem">Six clubs, each its own world.</h2>
+      </div>
+      <p class="gs-head-elem">From Hell's Kitchen to Madison Avenue — every TMPL is shaped by the neighborhood it calls home.</p>
+    </div>
+
+    <div class="loc-grid">
+
+      <div class="loc-tilt"><div class="loc-card">
+        <div class="loc-photo">
+          <span class="loc-code">HK</span>
+          <img src="https://images.prismic.io/tmplweb/4cf24ecb-c17e-4162-a1a3-1016a06cb4b1_Hell%27s+Kitchen+Locaitons+Image.jpg?auto=compress,format&w=700" alt="TMPL Hell's Kitchen pool">
+        </div>
+        <div class="loc-body">
+          <h3>Hell's Kitchen</h3>
+          <div class="loc-addr">355 West 49th St, New York, NY 10019</div>
+          <a href="tel:9175216666" class="loc-phone">(917) 521-6666</a>
+          <div class="loc-tags"><span>Boxing</span><span>25m Pool</span><span>Sauna/Steam</span></div>
+          <a href="#" class="loc-link">View Club →</a>
+        </div>
+      </div></div>
+
+      <div class="loc-tilt"><div class="loc-card">
+        <div class="loc-photo">
+          <span class="loc-code">WV</span>
+          <img src="https://images.prismic.io/tmplweb/bf5f38ef-6189-4e0e-a0b9-7161a4becc74_West+Village+Locations+Image.jpg?auto=compress,format&w=700" alt="TMPL West Village interior">
+        </div>
+        <div class="loc-body">
+          <h3>West Village</h3>
+          <div class="loc-addr">125 Seventh Ave So, New York, NY 10014</div>
+          <a href="tel:2122061500" class="loc-phone">(212) 206-1500</a>
+          <div class="loc-tags"><span>Infrared Sauna</span><span>Group Studio</span></div>
+          <a href="#" class="loc-link">View Club →</a>
+        </div>
+      </div></div>
+
+      <div class="loc-tilt"><div class="loc-card">
+        <div class="loc-photo">
+          <span class="loc-code">AVA</span>
+          <img src="https://images.prismic.io/tmplweb/2136a347-c3fa-402b-8f42-11e98b92b3da_TMPL+AVE+A+Small.jpg?auto=compress,format&w=700" alt="TMPL Avenue A functional training zone">
+        </div>
+        <div class="loc-body">
+          <h3>Avenue A</h3>
+          <div class="loc-addr">28-30 Avenue A, New York, NY 10009</div>
+          <a href="tel:9177204869" class="loc-phone">(917) 720-4869</a>
+          <div class="loc-tags"><span>Cycle Studio</span><span>Functional Zone</span></div>
+          <a href="#" class="loc-link">View Club →</a>
+        </div>
+      </div></div>
+
+      <div class="loc-tilt"><div class="loc-card">
+        <div class="loc-photo">
+          <span class="loc-code">AST</span>
+          <img src="https://images.prismic.io/tmplweb/9bb713bd-f6fc-4664-9292-70c1e71918ab_Astor+Place+Location+Image+2.jpg?auto=format,compress&w=700" alt="TMPL Astor Place club">
+        </div>
+        <div class="loc-body">
+          <h3>Astor Place</h3>
+          <div class="loc-addr">4 Astor Place, New York, NY 10003</div>
+          <a href="tel:9178771400" class="loc-phone">(917) 877-1400</a>
+          <div class="loc-tags"><span>Boxing Studio</span><span>Pilates Reformer</span><span>Hydro-Massage</span></div>
+          <a href="#" class="loc-link">View Club →</a>
+        </div>
+      </div></div>
+
+      <div class="loc-tilt"><div class="loc-card">
+        <div class="loc-photo">
+          <span class="loc-code">LEX</span>
+          <img src="https://images.prismic.io/tmplweb/b031996e-216d-4172-ae6c-6b7b109c0bfb_lex+banner+1.jpg?auto=compress,format&w=700" alt="TMPL 53rd and Lexington club">
+        </div>
+        <div class="loc-body">
+          <h3>53rd &amp; Lexington</h3>
+          <div class="loc-addr">155 East 53rd Street, New York, NY 10022</div>
+          <a href="tel:3322092000" class="loc-phone">(332) 209-2000</a>
+          <div class="loc-tags"><span>The Spa at TMPL</span><span>Smart Cardio</span></div>
+          <a href="#" class="loc-link">View Club →</a>
+        </div>
+      </div></div>
+
+      <div class="loc-tilt"><div class="loc-card">
+        <div class="loc-photo">
+          <span class="loc-code">MAD</span>
+          <img src="https://images.prismic.io/tmplweb/Z9Q4XBsAHJWomi9k_TMPL_Madison_09.jpg?auto=format,compress&w=700" alt="TMPL Madison Avenue club">
+        </div>
+        <div class="loc-body">
+          <h3>Madison Avenue</h3>
+          <div class="loc-addr">200 Madison Avenue, New York, NY 10016</div>
+          <a href="tel:3322425537" class="loc-phone">(332) 242-5537</a>
+          <div class="loc-tags"><span>TMPL Baths</span><span>Boxing Ring</span><span>Hot Yoga</span></div>
+          <a href="#" class="loc-link">View Club →</a>
+        </div>
+      </div></div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="cta-ring"></div>
+  <div class="wrap">
+    <span class="eyebrow gs-cta-elem">Begin the Ritual</span>
+    <h2 class="gs-cta-elem">Your first visit is <em>on us.</em></h2>
+    <a href="#" class="btn gs-cta-elem">Claim Your Visit</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="logotype">TMPL</span>
+        <p>A boutique fitness experience unlike any other — six sanctuaries across New York City.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="#locations">Locations</a>
+        <a href="#">Classes</a>
+        <a href="#">Training</a>
+      </div>
+      <div class="foot-col">
+        <h4>Club</h4>
+        <a href="#">Membership Policies</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Site Map</a>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 TMPL Clubs. All rights reserved.</span>
+      <div class="foot-social">
+        <a href="http://www.facebook.com/tmplclubs">Facebook</a>
+        <a href="https://www.instagram.com/tmplclubs/">Instagram</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('solid', window.scrollY > 40);
+  });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  if(!reduceMotion){
+    const heroTl = gsap.timeline();
+    heroTl.from(".gs-hero-elem", {
+      y: 40,
+      opacity: 0,
+      duration: 1.2,
+      stagger: 0.2,
+      ease: "power4.out",
+      delay: 0.2
+    });
+
+    gsap.from(".manifesto .pull", {
+      scrollTrigger: {
+        trigger: ".manifesto",
+        start: "top 80%",
+        end: "bottom 20%",
+        scrub: 1
+      },
+      y: 80,
+      rotationX: -15,
+      opacity: 0.2,
+      ease: "none"
+    });
+
+    gsap.from(".gs-fade", {
+      scrollTrigger: {
+        trigger: ".manifesto .body",
+        start: "top 85%"
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+
+    gsap.from(".gs-head-elem", {
+      scrollTrigger: {
+        trigger: ".locations",
+        start: "top 80%"
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: "power3.out"
+    });
+
+    gsap.to(".loc-tilt", {
+      scrollTrigger: {
+        trigger: ".loc-grid",
+        start: "top 85%"
+      },
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "back.out(1.2)"
+    });
+
+    gsap.from(".gs-cta-elem", {
+      scrollTrigger: {
+        trigger: ".cta-band",
+        start: "top 80%"
+      },
+      y: 40,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+
+    const heroBg = document.getElementById('heroBg');
+    const heroInner = document.getElementById('heroInner');
+    const heroSection = document.getElementById('heroSection');
+    let scrollY = 0, tiltX = 0, tiltY = 0;
+
+    window.addEventListener('scroll', () => { scrollY = window.scrollY; }, {passive:true});
+
+    if(canHover){
+      heroSection.addEventListener('mousemove', (e) => {
+        const r = heroSection.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - .5;
+        const py = (e.clientY - r.top) / r.height - .5;
+        tiltX = py * -6;
+        tiltY = px * 8;
+      });
+    }
+
+    function renderHero(){
+      const parallax = scrollY * 0.35;
+      heroBg.style.transform = `translateY(${parallax}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.08)`;
+      heroInner.style.transform = `translateY(${scrollY * -0.12}px)`;
+      requestAnimationFrame(renderHero);
+    }
+    requestAnimationFrame(renderHero);
+
+    if(canHover){
+      document.querySelectorAll('.loc-tilt').forEach(wrap => {
+        const card = wrap.querySelector('.loc-card');
+        wrap.addEventListener('mousemove', (e) => {
+          const r = wrap.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - .5;
+          const py = (e.clientY - r.top) / r.height - .5;
+          card.style.transform = `rotateX(${py * -10}deg) rotateY(${px * 12}deg) translateY(-4px)`;
+        });
+        wrap.addEventListener('mouseleave', () => {
+          card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0)';
+        });
+      });
+    }
+  } else {
+      gsap.set(".loc-tilt, .gs-hero-elem, .manifesto .pull, .gs-fade, .gs-head-elem, .gs-cta-elem", {opacity: 1, y: 0});
+  }
+</script>
+
+</body>
+</html>
